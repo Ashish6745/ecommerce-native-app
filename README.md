@@ -6,4 +6,4 @@ key Points
 4. Difference titles is used for different products added for ex- Product added from home screen will be visible inside home product , mobile added will display inside Mobile products etc.
 5. And Horizontal scrolling and vertical scrolling are used for flatList and Scrollview.
 6. Screenshots are added to show the UI of the app as well
-7. 
+7. #reactnative #coding #ecommerce #contextAPI #ui

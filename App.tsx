@@ -1,118 +1,106 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import {View, Text, StatusBar} from 'react-native';
+import React, { useContext } from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Home from './component/Home';
+import Mobiles from './component/Mobiles';
+import Cart from './component/Cart';
+import Computers from './component/Computers';
+import Tablets from './component/Tablets';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { CartContext } from './contextApi/ContextAPI';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const stack = createNativeStackNavigator();
+const bottom = createBottomTabNavigator();
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const Bottom = () => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
+    <stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#172774',
+        },
+        headerTitleStyle: {
+          color: 'white',
+        },
+        headerTintColor: 'white',
+      }}>
+      <stack.Screen name="Home" component={Home} />
+      <stack.Screen
+        name="Mobiles"
+        component={Mobiles}
+        options={{
+          headerStyle: {
+            backgroundColor: '#172774',
           },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
+          headerTitleStyle: {
+            color: 'white',
           },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+          headerTintColor: 'white',
+        }}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <stack.Screen name="Computers" component={Computers} />
+      <stack.Screen name="Tablets" component={Tablets} />
+    </stack.Navigator>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+const App = () => {
+  const{cart, mobile,tab} = useContext(CartContext)
+  return (
+    <NavigationContainer>
+      <StatusBar backgroundColor={'#172774'} />
+      <bottom.Navigator
+        screenOptions={{
+          tabBarStyle:{
+            backgroundColor:'#172774',
+            borderRadius:50,
+            margin:10
+          },
+          headerStyle: {
+            backgroundColor: '#172774',
+          },
+          headerTitleStyle: {
+            color: 'white',
+          },
+          headerTintColor: 'white',
+        }}>
+        <bottom.Screen
+          name="Bottom"
+          component={Bottom}
+          options={{
+           
+            tabBarIcon: () => (
+              <MaterialCommunityIcons name="home" size={30} color="#fff" />
+            ),
+          
+            headerShown: false,
+            tabBarLabel: '',
+          }}
+        />
+        <bottom.Screen
+          name="Cart"
+          component={Cart}
+          options={{
+          
+          tabBarBadge: cart.length + mobile.length + tab.length,
+            tabBarBadgeStyle:{backgroundColor:'red'},
+            tabBarLabel: '',
+            tabBarIcon: () => (
+              <MaterialCommunityIcons
+                name="cart-variant"
+                size={30}
+                color="#fff"
+              />
+            ),
+            
+          }}
+        />
+      </bottom.Navigator>
+    </NavigationContainer>
+  );
+};
 
 export default App;
